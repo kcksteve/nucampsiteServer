@@ -13,7 +13,7 @@ promotionRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(authenticate.verifyUser, (req, res, next) => {
+.post(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.create(req.body)
     .then(promotion => {
         res.statusCode = 201;
@@ -26,7 +26,7 @@ promotionRouter.route('/')
     res.statusCode = 403;
     res.end('PUT opreation not supported on /promotions');
 })
-.delete(authenticate.verifyUser, (req, res, next) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
     Promotion.deleteMany()
     .then(promotions => {
         res.statusCode = 200;
@@ -50,7 +50,7 @@ promotionRouter.route('/:promotionId')
     res.statusCode = 403;
     res.end('POST operation not supported');
 })
-.put(authenticate.verifyUser, (req, res) => {
+.put(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     Promotion.findByIdAndUpdate(req.params.campsiteId, {
         $set: req.body
     }, {
@@ -63,7 +63,7 @@ promotionRouter.route('/:promotionId')
     })
     .catch(err => next(err));
 })
-.delete(authenticate.verifyUser, (req, res) => {
+.delete(authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => {
     Promotion.findByIdAndDelete(req.params.promotionId)
     .then(promotion => {
         res.statusCode = 200;
